@@ -71,7 +71,7 @@ function guardarInfoPokemon(dados) {
 
     const types = dados.types;
     novoPokemon.tipagem.length = types.length;
-    for(let i = 0; i < types.length; i++) {
+    for (let i = 0; i < types.length; i++) {
         novoPokemon.tipagem[i] = types[i].type.name;
     }
     
