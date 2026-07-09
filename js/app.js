@@ -1,0 +1,1 @@
+export const QUANTIDADE_POKEMONS = 151;
