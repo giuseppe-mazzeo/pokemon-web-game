@@ -12,6 +12,9 @@ class Jogador {
         this.equipe = [];
 
         this.duracao_jogo = new Temporizador();
+        this.batalhas_ganhas = 0;
+        this.batalhas_perdidas = 0;
+        this.total_pokemons_capturados = 0;
         this.pokedex = [];
 
         this.sprite_back = "";

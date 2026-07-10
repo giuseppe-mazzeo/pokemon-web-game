@@ -1,5 +1,3 @@
-// TODO - descricao
-
 import { TODOS_MOVIMENTOS } from "./movimentos.js";
 
 
@@ -26,6 +24,7 @@ class Pokemon {
 
         this.peso = 0;
         this.altura = 0;
+        this.taxa_captura = 0;
 
         this.experiencia_base = 0;
 
@@ -37,6 +36,7 @@ class Pokemon {
         this.sprite_back = "";
         this.sprite_front = "";
         this.icone = "";
+        this.descricao = "";
     }
 }
 
@@ -60,29 +60,29 @@ function gerarShinyAleatorio() {
 
 
 function gerarQuatroAtaquesBasesAleatorios(pokemon) {
-    let contador = 4;
+    let movimentosPossiveis = [];
     let movimentosAleatorios = [];
-    let movimentoAtual;
-    let numMax = pokemon.todos_movimentos.length - 1;
-    let numAleatorio;
 
-    console.log("AQUIO POHAAAAA");
-    
-    
-    while (contador > 0) {
-        numAleatorio = Math.floor(Math.random() * numMax) + 1;
-        movimentoAtual = pokemon.todos_movimentos[numAleatorio];
-
-        if (pokemon.nivel >= movimentoAtual.nivel) {
-            movimentosAleatorios.push(TODOS_MOVIMENTOS[movimentoAtual.movimentoId]);
-            contador--;
+    for (let movimentoAtual of pokemon.todos_movimentos) {
+        if (pokemon.nivel < movimentoAtual.nivelAprendido) {
+            break;
         }
-        console.log("AAAA");
-        
+
+        movimentosPossiveis.push(TODOS_MOVIMENTOS[movimentoAtual.movimentoId]);
     }
 
-    console.log(movimentosAleatorios);
-    
+    const quantMovimento = movimentosPossiveis.length;
+    const loops = Math.min(quantMovimento, 4);
+    for (let i = 0; i < loops;) {
+        const numAleatorio = Math.floor(Math.random() * quantMovimento);
+        let movAlea = movimentosPossiveis[numAleatorio];
+        
+        if (!movimentosAleatorios.includes(movAlea)) {
+            movimentosAleatorios.push(movAlea);
+            i++;
+        }
+    }
+
     return movimentosAleatorios;
 }
 
@@ -124,12 +124,12 @@ function guardarInfoPokemon(dados) {
             movimentoId: id
         });
     }
-    novoPokemon.todos_movimentos.sort((a, b) => a.nivel - b.nivel);
+    novoPokemon.todos_movimentos.sort((a, b) => a.nivelAprendido - b.nivelAprendido);
 
     novoPokemon.movimentos_atuais = gerarQuatroAtaquesBasesAleatorios(novoPokemon);
 
     novoPokemon.som_emitido = dados.cries.legacy;
-    
+
     if (!novoPokemon.shiny) {
         novoPokemon.sprite_back = dados.sprites.versions['generation-v']['black-white'].animated.back_default;
         novoPokemon.sprite_front = dados.sprites.versions['generation-v']['black-white'].animated.front_default;
@@ -144,7 +144,7 @@ function guardarInfoPokemon(dados) {
 
 
 // https://pokeapi.co/api/v2/pokemon/1
-export async function buscarPokemonAPI(idPokedex) {
+async function buscarPokemonAPI(idPokedex) {
     const resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${idPokedex}`);
 
     if (!resposta.ok) {
@@ -152,7 +152,31 @@ export async function buscarPokemonAPI(idPokedex) {
     }
 
     const dados = await resposta.json();
-    return guardarInfoPokemon(dados);
+
+    const pokemon = guardarInfoPokemon(dados);
+
+    buscarMaisInfoPokemonAPI(pokemon);
+
+    return pokemon;
 }
 
 
+// https://pokeapi.co/api/v2/pokemon-species/150
+async function buscarMaisInfoPokemonAPI(pokemon) {
+    const resposta = await fetch(` https://pokeapi.co/api/v2/pokemon-species/${pokemon.id}`);
+
+    if (!resposta.ok) {
+        throw new Error("Erro na rede");
+    }
+
+    const dados = await resposta.json();
+
+    pokemon.taxa_captura = dados.capture_rate;
+    pokemon.descricao = dados['flavor_text_entries'][0]['flavor_text'].replace(/[\n\f]/g, " ").replace(/\s+/g, " ").trim();;
+}
+
+
+
+export function criarPokemon(idPokedex) {
+    return buscarPokemonAPI(idPokedex);
+}
