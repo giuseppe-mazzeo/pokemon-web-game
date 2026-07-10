@@ -21,3 +21,5 @@ O documento jogador.js tem nele uma classe jogador. Serve para criar uma nova in
 O documento inventario.js tem todos os itens dentro do jogo. Utilizado no armazenamentos de itens do jogador e da loja. Utilizei um dicionario para guardar os itens pois fica mais facil fazer busca de chave e valor, assim sendo, fica facil para adicionar ou diminuir os itens.
 
 O documento loja.js tem a classe loja, onde podemos comprar os itens.
+
+No app.js é o coracao do projeto. Nele eu começo por rodar na seguinte ordem, pegar todos os movimentos e suas informacoes guardando numa variavel global com todos os movimentos, depois pego todos os pokemons. Faço fectch tanto para buscar movimento como para pokemon. Depois eu conecto os movimentos da variavel global pelos movimentos dos pokemons, faço essa coneccao a partir do id de cada movimento.  

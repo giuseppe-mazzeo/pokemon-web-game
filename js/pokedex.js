@@ -1,9 +1,15 @@
 import { buscarPokemonAPI } from './pokemon.js';
 import { QUANTIDADE_POKEMONS } from './app.js';
 
-const pokedex = [];
+const POKEDEX = [];
 
-for (let i = 1; i <= QUANTIDADE_POKEMONS; i++) {
-    //pokedex[i-1] = await buscarPokemonAPI(i);
-    //console.log(`${pokedex[i-1].nome} criado!`);   
+
+
+export async function carregarPokedex() { 
+    for (let i = 1; i <= QUANTIDADE_POKEMONS; i++) {
+        POKEDEX[i-1] = await buscarPokemonAPI(i);
+        //console.log(`${POKEDEX[i-1].nome} criado!`);
+    } 
+    
+    console.log(POKEDEX);
 }

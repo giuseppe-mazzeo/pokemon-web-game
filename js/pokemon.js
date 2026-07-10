@@ -1,4 +1,8 @@
-// TODO - moves & descricao
+// TODO - descricao
+
+import { TODOS_MOVIMENTOS } from "./movimentos.js";
+
+
 
 class Pokemon {
     constructor() {
@@ -38,7 +42,6 @@ class Pokemon {
 
 
 
-
 function gerarNivelAleatorio() {
     return Math.floor(Math.random() * 100) + 1;
 }
@@ -53,6 +56,34 @@ function gerarSexo() {
 
 function gerarShinyAleatorio() {
     return false;
+}
+
+
+function gerarQuatroAtaquesBasesAleatorios(pokemon) {
+    let contador = 4;
+    let movimentosAleatorios = [];
+    let movimentoAtual;
+    let numMax = pokemon.todos_movimentos.length - 1;
+    let numAleatorio;
+
+    console.log("AQUIO POHAAAAA");
+    
+    
+    while (contador > 0) {
+        numAleatorio = Math.floor(Math.random() * numMax) + 1;
+        movimentoAtual = pokemon.todos_movimentos[numAleatorio];
+
+        if (pokemon.nivel >= movimentoAtual.nivel) {
+            movimentosAleatorios.push(TODOS_MOVIMENTOS[movimentoAtual.movimentoId]);
+            contador--;
+        }
+        console.log("AAAA");
+        
+    }
+
+    console.log(movimentosAleatorios);
+    
+    return movimentosAleatorios;
 }
 
 
@@ -74,7 +105,7 @@ function guardarInfoPokemon(dados) {
     for (let i = 0; i < types.length; i++) {
         novoPokemon.tipagem[i] = types[i].type.name;
     }
-    
+
     novoPokemon.nome = dados.name;
     novoPokemon.sexo = gerarSexo();
     novoPokemon.shiny = gerarShinyAleatorio();
@@ -84,11 +115,21 @@ function guardarInfoPokemon(dados) {
 
     novoPokemon.experiencia_base = dados.base_experience;
 
-    novoPokemon.todos_movimentos = dados.moves;
-    novoPokemon.movimentos_atuais = ["1", "2", "3", "4"];
+    for (const movimentoAtual of dados.moves) {
+        const partes = movimentoAtual.move.url.split("/");
+        const id = Number(partes[partes.length - 2]);
+
+        novoPokemon.todos_movimentos.push({
+            nivelAprendido: movimentoAtual['version_group_details'][0]['level_learned_at'],
+            movimentoId: id
+        });
+    }
+    novoPokemon.todos_movimentos.sort((a, b) => a.nivel - b.nivel);
+
+    novoPokemon.movimentos_atuais = gerarQuatroAtaquesBasesAleatorios(novoPokemon);
 
     novoPokemon.som_emitido = dados.cries.legacy;
-
+    
     if (!novoPokemon.shiny) {
         novoPokemon.sprite_back = dados.sprites.versions['generation-v']['black-white'].animated.back_default;
         novoPokemon.sprite_front = dados.sprites.versions['generation-v']['black-white'].animated.front_default;
@@ -111,6 +152,7 @@ export async function buscarPokemonAPI(idPokedex) {
     }
 
     const dados = await resposta.json();
-
     return guardarInfoPokemon(dados);
 }
+
+
