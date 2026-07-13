@@ -10,6 +10,7 @@ class Jogador {
         this.inventario = new Inventario();
         
         this.equipe = [];
+        this.computador = [];
 
         this.duracao_jogo = new Temporizador();
         this.batalhas_ganhas = 0;
@@ -22,11 +23,25 @@ class Jogador {
         this.sprite_right = "";
         this.sprite_front = "";
     }
+
+
+    adicionarNaEquipe(pokemon) {
+        if (this.equipe.length > 6) {
+            this.computador.push(pokemon);
+            return;
+        }
+
+        this.equipe.push(pokemon);
+    }
+
+    pokemonInicialBatalha() {
+        return this.equipe[0];
+    }
 }
 
 
 
-function criarJogador(nome, sexo) {
+export function criarJogador(nome, sexo) {
     const novoJogador = new Jogador();
 
     novoJogador.nome = nome;

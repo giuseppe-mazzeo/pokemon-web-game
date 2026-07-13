@@ -11,5 +11,5 @@ export async function carregarPokedex() {
         //console.log(`${POKEDEX[i-1].nome} criado!`);
     } 
     
-    console.log(POKEDEX);
+    //console.log(POKEDEX);
 }

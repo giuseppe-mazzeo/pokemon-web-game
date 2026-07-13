@@ -1,6 +1,8 @@
 import { TODOS_MOVIMENTOS } from "./movimentos.js";
 
 
+// TODO - gerar shiny
+
 
 class Pokemon {
     constructor() {
@@ -37,6 +39,11 @@ class Pokemon {
         this.sprite_front = "";
         this.icone = "";
         this.descricao = "";
+    }
+
+
+    selecionarAtaque(posicao) {
+        return this.movimentos_atuais[posicao];
     }
 }
 
