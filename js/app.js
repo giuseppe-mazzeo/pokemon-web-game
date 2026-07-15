@@ -1,11 +1,15 @@
-import { TODOS_MOVIMENTOS, buscarMovimentosAPI } from "./movimentos.js";
+import { buscarMovimentosAPI } from "./movimentos.js";
 import { carregarPokedex } from "./pokedex.js";
 import { criarJogador } from "./jogador.js";
 import { Batalha } from "./batalha.js";
 import { criarPokemon } from "./pokemon.js";
 
-export const QUANTIDADE_POKEMONS = 2; //151
+export const QUANTIDADE_POKEMONS = 151; //151
 export const QUANTIDADE_MOVIMENTOS = 919; //919
+
+const botaoBatalha = document.querySelector('.botaoBatalha');
+
+
 
 
 

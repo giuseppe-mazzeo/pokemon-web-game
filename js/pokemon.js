@@ -45,7 +45,12 @@ class Pokemon {
     selecionarAtaque(posicao) {
         return this.movimentos_atuais[posicao];
     }
+
+    static criar(obj) {
+        return Object.assign(new Pokemon(), obj);
+    }
 }
+
 
 
 
@@ -74,12 +79,13 @@ function gerarQuatroAtaquesBasesAleatorios(pokemon) {
         if (pokemon.nivel < movimentoAtual.nivelAprendido) {
             break;
         }
-
+        
         movimentosPossiveis.push(TODOS_MOVIMENTOS[movimentoAtual.movimentoId]);
     }
 
     const quantMovimento = movimentosPossiveis.length;
     const loops = Math.min(quantMovimento, 4);
+
     for (let i = 0; i < loops;) {
         const numAleatorio = Math.floor(Math.random() * quantMovimento);
         let movAlea = movimentosPossiveis[numAleatorio];
@@ -153,6 +159,7 @@ function guardarInfoPokemon(dados) {
 // https://pokeapi.co/api/v2/pokemon/1
 async function buscarPokemonAPI(idPokedex) {
     const resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${idPokedex}`);
+    
 
     if (!resposta.ok) {
         throw new Error("Erro na rede");

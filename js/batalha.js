@@ -67,9 +67,7 @@ export class Batalha {
             this.iniciarTurno();
             this.turnoAtual++;
         }
-
     }
-
 }
 
 
